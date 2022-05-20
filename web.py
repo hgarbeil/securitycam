@@ -27,26 +27,28 @@ app = dash.Dash(__name__)
 
 app.layout = html.Div(children=[
     dash.dcc.Interval(id='update_int', interval=30 * 1000, n_intervals=0),
-    html.Pre("Selected Video"),
+    
     html.Div([
-        dash.dcc.Dropdown(
-            id="mpeg-dd",
-            options=mp4s,
-            value=mp4s[0],
-        )], style={'width': '40%'}),
-    html.Pre("------------------"),
-    html.Div(id='vid_placeholder'),
-    html.Pre("Selected JPEG"),
+		#html.Pre("Selected Video",style={'font-size':'12px'}),
+		html.H3("Selected Video"),
+        	dash.dcc.Dropdown(
+            	id="mpeg-dd",
+            	options=mp4s,
+            	value=mp4s[0]),
+    		html.Pre("------------------"),
+    		html.Div(id='vid_placeholder'),
+    ], style={'width': '48%','display':'inline-block'}),
     html.Div([
-        dash.dcc.Dropdown(
-            id="jpeg-dd",
-            options=jpegs,
-            value=jpegs[0],
-        )
-    ], style={'width': '40%'}),
-    html.Pre("------------------"),
+	html.H3("Selected JPG"), 
+       	dash.dcc.Dropdown(
+           	id="jpeg-dd",
+            	options=jpegs,
+                value=jpegs[0],
+        	),
+    	html.Pre("------------------"),
+    	html.Div(id='img_placeholder'),
+    ], style={'width': '48%','display':'inline-block'}),
     # dash.dcc.Graph(id='my_jpeg'),
-    html.Div(id='img_placeholder'),
 ])
 
 
@@ -66,8 +68,8 @@ def hello_there(val_vid, val_jpg):
         # src = "assets/last.mp4",
         src=val_vid,
         autoPlay=True
-    )
-    imagecomp = html.Img(src=val_jpg)
+    	,style={'width':'98%'})
+    imagecomp = html.Img(src=val_jpg, style={'width':'98%'})
     return ([myvid, imagecomp])
 
 
