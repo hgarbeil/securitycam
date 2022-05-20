@@ -1,20 +1,9 @@
 import dash
 # import dash_html_components as html
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 from dash import html
 from fileops import *
 
-
-def get_file_list():
-    # get jpeg files
-    list0 = filter(os.path.isfile, glob.glob("assets/*.jpg"))
-    jpegs = sorted(list0, key=os.path.getctime)
-    jpegs.reverse()
-    # get mp4 files
-    list1 = filter(os.path.isfile, glob.glob("assets/*.mp4"))
-    mp4s = sorted(list1, key=os.path.getmtime)
-    mp4s.reverse()
-    return (jpegs, mp4s)
 
 
 jpegs, mp4s = get_file_list()
@@ -27,7 +16,7 @@ app.layout = html.Div(children=[
     dash.dcc.Interval(id='update_int', interval=30 * 1000, n_intervals=0),
     html.Div([
         html.H4 ("Maximum File Age (days)"),
-    	dash.dcc.Input(id='maxdays_input',type="number", placeholder=30),
+    	dash.dcc.Input(id='maxdays_input',type="number", value=30),
 	], style={'width':'30%'}),
     
     html.Div([
@@ -79,7 +68,7 @@ def hello_there(val_vid, val_jpg):
 @app.callback(
     [Output('mpeg-dd', component_property='options')],
     [Output('jpeg-dd', component_property='options')],
-    [Input('maxdays_input', 'ndays')],
+    [State('maxdays_input', 'value')],
     [Input('update_int', 'n_intervals')],
 )
 
