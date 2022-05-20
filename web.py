@@ -2,9 +2,7 @@ import dash
 # import dash_html_components as html
 from dash.dependencies import Input, Output
 from dash import html
-import glob
-import os
-import time
+from fileops import *
 
 
 def get_file_list():
@@ -27,8 +25,13 @@ app = dash.Dash(__name__)
 
 app.layout = html.Div(children=[
     dash.dcc.Interval(id='update_int', interval=30 * 1000, n_intervals=0),
+    html.Div([
+        html.H4 ("Maximum File Age (days)"),
+    	dash.dcc.Input(id='maxdays_input',type="number", placeholder=30),
+	], style={'width':'30%'}),
     
     html.Div([
+                
 		#html.Pre("Selected Video",style={'font-size':'12px'}),
 		html.H3("Selected Video"),
         	dash.dcc.Dropdown(
@@ -76,11 +79,12 @@ def hello_there(val_vid, val_jpg):
 @app.callback(
     [Output('mpeg-dd', component_property='options')],
     [Output('jpeg-dd', component_property='options')],
-    [Input('update_int', 'n_intervals')]
+    [Input('maxdays_input', 'ndays')],
+    [Input('update_int', 'n_intervals')],
 )
 
-def update_dd(nint):
-    jp0, mp0 = get_file_list()
+def update_dd(ndays,nint):
+    jp0, mp0 = get_file_age(ndays)
     return ([mp0, jp0])
 
 
