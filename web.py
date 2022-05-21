@@ -17,7 +17,8 @@ app.layout = html.Div(children=[
     html.Div([
         html.H4 ("Maximum File Age (days)"),
     	dash.dcc.Input(id='maxdays_input',type="number", value=30),
-	], style={'width':'30%'}),
+	html.Button("Update",id='submit_button',n_clicks=0),
+	], style={'width':'80%'}),
     
     html.Div([
                 
@@ -69,10 +70,11 @@ def hello_there(val_vid, val_jpg):
     [Output('mpeg-dd', component_property='options')],
     [Output('jpeg-dd', component_property='options')],
     [State('maxdays_input', 'value')],
-    [Input('update_int', 'n_intervals')],
+    #[Input('update_int', 'n_intervals')],
+    [Input('submit_button', 'n_clicks')],
 )
 
-def update_dd(ndays,nint):
+def update_dd(ndays,nclicks):
     jp0, mp0 = get_file_age(ndays)
     return ([mp0, jp0])
 
